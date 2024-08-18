@@ -1,99 +1,79 @@
-﻿@model BookDisplayModel
-
-<div class="text-center">
-  <h1 class="display-4">Chào mừng anh em đến với channel Coding With Thinh</h1>
-</div>
+﻿@model NhaSachOnline.Models.DTOs.BookDislayModel
 
 <div class="my-2">
   <form asp-action="Index" class="row row-cols-lg-auto g-3 align-items-center">
     <div class="col-12">
-      <label class="visually-hidden" for="theloaiID">
-        Search
-      </label>
+      <label class="visually-hidden" for="genreId">Thể Loại</label>
+      <select class="form-select" id="genreId" name="genreId">
+        <option selected>Thể Loại</option>
+      </select>
+    </div>
+
+    <div class="col-12">
+      <label class="visually-hidden" for="sterm">Tìm kiếm theo tiêu đề</label>
       <div class="input-group">
-        <input type="text" class="form-control" id="theloaiID" name="theloaiID" placeholder="Search" />
+        <div class="input-group-text"></div>
       </div>
     </div>
 
     <div class="col-12">
-      <label class="visually-hidden" for="">
-        Thể loại
-      </label>
-      <select class="form-select" aria-label="Default select example">
-        <option selected>Thể loại ...</option>
-        <option value="1">Fantasy</option>
-        <option value="2">Kinh dị</option>
-        <option value="3">Romance</option>
-        <option value="4">Khoa học viễn tưởng</option>
-      </select>
+      <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+      <a href="/Home/Index" class="btn btn-dark">Reset</a>
     </div>
-
-    <div>
-      <button type="submit" class="btn btn-primary">
-        Search
-      </button>
-      <a href="/Home/Index" class="btn btn-dark">Trở lại trang home</a>
-    </div>
-
   </form>
 </div>
 
-@* <div class="w-100 mt-4 mb-5 d-flex flex-wrap justify-content-center">
-  <div class="card mx-2 mb-4" style="width: 18rem;">
-    <img src="~/img/doctor who - empire of the wolf.jpg" class="card-img-top" alt="..." />
-    <div class="card-body">
-      <h5 class="card-title">Doctor Who</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      <a href="#" class="btn btn-primary">Thêm vào giỏ hàng</a>
-    </div>
-  </div>
-
-  <div class="card mx-2 mb-4" style="width: 18rem;">
-    <img src="~/img/doctor who - once upon a time lord (bbc doctor who).jpg" />
-    <div class="card-body">
-      <h5 class="card-title">Doctor Who</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
-  </div>
-
-  <div class="card mx-2 mb-4" style="width: 18rem;">
-    <img src="~/img/doctor who - the eleventh doctor vol. 1 - after life.jpg" />
-    <div class="card-body">
-      <h5 class="card-title">Doctor Who</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
-  </div>
-
-  <div class="card mx-2 mb-4" style="width: 18rem;">
-    <img src="~/img/doctor who - the ninth doctor vol. 1 - weapons of past destruction.jpg" />
-    <div class="card-body">
-      <h5 class="card-title">Doctor Who</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
-  </div>
-</div> *@
-
-<div class="w-100 mt-4 mb-5 d-flex flex-wrap justify-content-center">
-  @* @for(int i = 1; i <= 8; i++)
+<div class="w-100 mt-4 d-flex flex-wrap ">
+  @foreach (var book in Model.Books)
   {
-    <div class="card mx-2 mb-4" style="width: 16rem;">
-      <img src="https://m.media-amazon.com/images/I/91147XjTc1L._SL1500_.jpg" class="card-img-top" alt="doctor-who" />
+    <div class="card mx-3 mb-4" style="width: 11rem;">
+      @if (string.IsNullOrEmpty(book.Image))
+      {
+        <img style="width:100%;height:180px" src="https://m.media-amazon.com/images/I/91147XjTc1L._SL1500_.jpg" class="card-img-top" alt="...">
+      }
+      else
+      {
+        <img style="width:100%;height:180px" src="/images/@book.Image" class="card-img-top" alt="...">
+      }
       <div class="card-body">
-        <h5 class="card-title">Doctor Who</h5>
-        <p class="card-text">Doctor Who: The Tenth Doctor 1: Revolutions of Terror</p>
-        <a href="#" class="btn btn-primary">Thêm vào giỏ hàng</a>
+        <h5 class="card-title">@book.BookName</h5>
+        <p class="card-text">
+          <b>Genre: </b>@book.GenreName <br />
+          <b>Author: </b>@book.AuthorName <br />
+          <b>Price: </b>@book.Price
+        </p>
+        @if (book.Quantity > 0)
+        {
+          <button type="button" onclick="add(@book.Id)" class="btn btn-primary">Thêm vào giỏ hàng</button>
+        }
+        else
+        {
+          <span style="border: 1px solid;padding: 5px 8px;color: red;border-radius: 5px;">Out of stock</span>
+        }
       </div>
     </div>
-  } *@
-  
-  @* <select>
-    <option selected>Thể Loại</option>
-    @foreach (var genre in Model.Genres)
-    {
-      <option selected="@(genre.Id == Model.GereId)" value="@genre.Id">@genre.GereName</option>
-    }
-  </select> *@
+  }
 </div>
+
+@section Scripts {
+  <script>
+    async function add(bookId) {
+      var usernameEl = document.getElementById("username");
+      if (usernameEl == null) {
+        window.location.href = "/Identity/Account/Login";
+      }
+      try {
+        var response = await fetch(`/Cart/AddItem?bookId=${bookId}`);
+        if (response.status == 200) {
+          var result = await response.json();
+          var cartCountEl = document.getElementById("cartCount");
+          cartCountEl.innerHTML = result;
+          window.location.href = "#cartCount";
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+  </script>
+}
